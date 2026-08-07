@@ -1,4 +1,3 @@
-using AdminPortal.Data;
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
@@ -8,6 +7,8 @@ var connectionString = builder.Configuration.GetConnectionString("DefaultConnect
                         ?? throw new InvalidOperationException("Connection string 'DefaultConnection' not found.");
 
 builder.Services.AddSingleton(new Database(connectionString));
+builder.Services.AddScoped<IProductRepository, ProductRepository>();
+builder.Services.AddScoped<IProductService, ProductService>();
 
 var app = builder.Build();
 
