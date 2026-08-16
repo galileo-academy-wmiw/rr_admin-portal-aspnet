@@ -1,7 +1,10 @@
+using System.ComponentModel.DataAnnotations;
+
 namespace AdminPortal.Models;
 
 public class Product
 {
+    [Key]
     public int ProductId  { get; set; }
     public string ProductName { get; private set; }
     public string Description { get; private set; }
