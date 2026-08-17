@@ -13,68 +13,56 @@ public class ProductRepository: IProductRepository
         _context = context;
     }
 
-    /*
-    ------------------------------------------------------------------
-    METHOD: Retrieves full Product objects.
-    ------------------------------------------------------------------
-    */
+/*
+------------------------------------------------------------------
+METHOD: Retrieves full Product objects.
+------------------------------------------------------------------
+*/
     public List<Product> GetAllProducts()
     {
         return _context.Products.OrderBy(p => p.ProductId).ToList();
     }
 
-    /*
-    ------------------------------------------------------------------
-    Method: INSERT a new product in product catalogue. 
-    ------------------------------------------------------------------
-    */
+/*
+------------------------------------------------------------------
+Method: INSERT a new product in product catalogue. 
+------------------------------------------------------------------
+*/
 
     public int InsertProduct(string productName, string description, double productPrice, int quantityInStock)
     {
         var product = new Product (productName, description, productPrice, quantityInStock);
         _context.Products.Add(product);
-        return _context.SaveChanges();
+
+        int effectedEntries = _context.SaveChanges();
+        return effectedEntries;
     }
 
-    /*
-   ------------------------------------------------------------------
-   Method: Edit/ Update a product product in product catalogue. 
-   ------------------------------------------------------------------
-   */
+/*
+------------------------------------------------------------------
+Method: Edit/ Update a product product in product catalogue. 
+------------------------------------------------------------------
+*/
 
     public int UpdateProduct(int id, string productName, string description, double productPrice, int quantityInStock)
     {
-        using var connection = _database.GetConnection();
-        connection.Open();
+        var product = _context.Products.FirstOrDefault(p => p.ProductId == id);
+        if (product == null)
+        {
+            return 0;
+        }
+        product.UpdateProductDetails(productName, description, productPrice, quantityInStock);
 
-        string query = @"
-        UPDATE 
-            product_catalogue
-        SET 
-            product_name = @product_name,
-            description = @description,
-            product_price = @product_price,
-            quantity_in_stock = @quantity_in_stock
-        WHERE 
-            product_id = @product_id;
-        ";
+        int effectedEntries = _context.SaveChanges();
+        return effectedEntries;     
 
-        MySqlCommand myCommand = new MySqlCommand(query, connection);
-        myCommand.Parameters.AddWithValue("@product_name", productName);
-        myCommand.Parameters.AddWithValue("@description", description);
-        myCommand.Parameters.AddWithValue("@product_price", productPrice);
-        myCommand.Parameters.AddWithValue("@quantity_in_stock", quantityInStock);
-        myCommand.Parameters.AddWithValue("@product_id", id);
-
-        int affectedRows = myCommand.ExecuteNonQuery();
-        return affectedRows;
     }
 
-    /*
-  ------------------------------------------------------------------
-  Method: Delete a product product in product catalogue. 
-  ------------------------------------------------------------------
-  */
+/*
+------------------------------------------------------------------
+Method: Delete a product product in product catalogue. 
+------------------------------------------------------------------
+*/
     public int DeleteProduct(int id)
     {
         using var connection = _database.GetConnection();
@@ -95,13 +83,13 @@ public class ProductRepository: IProductRepository
         return affectedRows;
     }
 
-    /*
-    ==========================================================================================
-    Method: Checks if a product is referenced in order_details (prevents delete due to FK constraint).
-    Parameter: productId = the product to check.
-    Returns: 'true' if this product is used in order_details. Otherwise 'false'.
-    ==========================================================================================
-    */
+/*
+==========================================================================================
+Method: Checks if a product is referenced in order_details (prevents delete due to FK constraint).
+Parameter: productId = the product to check.
+Returns: 'true' if this product is used in order_details. Otherwise 'false'.
+==========================================================================================
+*/
     public bool IsProductInUse(int productId)
     {
         using var connection = _database.GetConnection();

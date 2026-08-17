@@ -36,6 +36,14 @@ public class Product
         QuantityInStock = 0;
     }
 
+    public void UpdateProductDetails (string productName, string description, double productPrice, int quantityInStock)
+    {
+        ProductName = productName;
+        Description = description;
+        ProductPrice = productPrice;
+        QuantityInStock = quantityInStock;
+    }
+
     public override string ToString()
     {
         return @$"
