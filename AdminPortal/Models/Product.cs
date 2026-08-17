@@ -5,7 +5,7 @@ namespace AdminPortal.Models;
 public class Product
 {
     [Key]
-    public int ProductId  { get; set; }
+    public int ProductId { get; set; }
     public string ProductName { get; private set; }
     public string Description { get; private set; }
     public double ProductPrice { get; private set; }
@@ -20,6 +20,13 @@ public class Product
         QuantityInStock = quantityInStock;
     }
 
+    public Product(string productName, string description, double productPrice, int quantityInStock)
+    {
+        ProductName = productName;
+        Description = description;
+        ProductPrice = productPrice;
+        QuantityInStock = quantityInStock;
+    }
     public Product(int productId)
     {
         ProductId = productId;
@@ -39,5 +46,5 @@ public class Product
         Quantity in Stock: {QuantityInStock};
         ";
     }
-   
+
 }

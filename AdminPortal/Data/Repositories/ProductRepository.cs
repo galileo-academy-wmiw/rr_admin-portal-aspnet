@@ -31,24 +31,9 @@ public class ProductRepository: IProductRepository
 
     public int InsertProduct(string productName, string description, double productPrice, int quantityInStock)
     {
-        using var connection = _database.GetConnection();
-        connection.Open();
-
-        string query = @"
-        INSERT INTO 
-        product_catalogue 
-        (product_name, description, product_price, quantity_in_stock)
-        VALUES
-        (@product_name, @description, @product_price, @quantity_in_stock)
-        ;";
-        MySqlCommand myCommand = new MySqlCommand(query, connection);
-        myCommand.Parameters.AddWithValue("@product_name", productName);
-        myCommand.Parameters.AddWithValue("@description", description);
-        myCommand.Parameters.AddWithValue("@product_price", productPrice);
-        myCommand.Parameters.AddWithValue("@quantity_in_stock", quantityInStock);
-
-        int affectedRows = myCommand.ExecuteNonQuery();
-        return affectedRows;
+        var product = new Product (productName, description, productPrice, quantityInStock);
+        _context.Products.Add(product);
+        return _context.SaveChanges();
     }
 
     /*
