@@ -1,15 +1,11 @@
-using MySqlConnector;
-
 namespace AdminPortal.Data.Repositories;
 
 public class ProductRepository: IProductRepository
 {
-    private readonly Database _database;
     private readonly AppDbContext _context;
 
-    public ProductRepository(Database database, AppDbContext context)
+    public ProductRepository(AppDbContext context)
     {
-        _database = database;
         _context = context;
     }
 
@@ -87,20 +83,7 @@ Returns: 'true' if this product is used in order_details. Otherwise 'false'.
 */
     public bool IsProductInUse(int productId)
     {
-        using var connection = _database.GetConnection();
-        connection.Open();
-
-        string query = @"
-        SELECT 1
-        FROM order_details
-        WHERE product_id = @product_id
-        LIMIT 1;
-        ";
-
-        MySqlCommand myCommand = new MySqlCommand(query, connection);
-        myCommand.Parameters.AddWithValue("@product_id", productId);
-
-        var result = myCommand.ExecuteScalar();
-        return result != null;
+        bool result = _context.OrderDetails.Any(od => od.ProductId == productId);
+        return result;
     }
 }
