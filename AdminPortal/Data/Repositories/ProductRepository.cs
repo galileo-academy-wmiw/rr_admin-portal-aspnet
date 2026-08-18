@@ -51,6 +51,7 @@ Method: Edit/ Update a product product in product catalogue.
         {
             return 0;
         }
+        
         product.UpdateProductDetails(productName, description, productPrice, quantityInStock);
 
         int effectedEntries = _context.SaveChanges();
@@ -65,22 +66,16 @@ Method: Delete a product product in product catalogue.
 */
     public int DeleteProduct(int id)
     {
-        using var connection = _database.GetConnection();
-        connection.Open();
+        var product = _context.Products.FirstOrDefault(p => p.ProductId == id);
+        if (product == null)
+        {
+            return 0;
+        }
 
-        string query = @"
-        DELETE 
-        FROM 
-        product_catalogue
-        WHERE
-        product_id = @product_id;
-        ";
+        _context.Products.Remove(product);
 
-        MySqlCommand myCommand = new MySqlCommand(query, connection);
-        myCommand.Parameters.AddWithValue("@product_id", id);
-
-        int affectedRows = myCommand.ExecuteNonQuery();
-        return affectedRows;
+        int effectedEntries = _context.SaveChanges();
+        return effectedEntries;
     }
 
 /*
