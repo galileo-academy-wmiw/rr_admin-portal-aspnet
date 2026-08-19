@@ -1,67 +1,24 @@
-using MySqlConnector;
+using Microsoft.EntityFrameworkCore;
 
 namespace AdminPortal.Data.Repositories;
 
 public class CustomerRepository: ICustomerRepository
 {
-    private readonly Database _database;
+    private readonly AppDbContext _context;
 
-    public CustomerRepository(Database database)
+    public CustomerRepository(AppDbContext context)
     {
-        this._database = database;
+        _context = context;    
     }
 
-    // ------------------------------------------------------------------
-    // METHOD: Retrieves full Customer objects (Customer has User).
-    // ------------------------------------------------------------------
-
+    // Retrieves full Customer objects (Customer has User).
     public List<Customer> GetAllCustomers()
     {
-        using var connection = _database.GetConnection();
-        connection.Open();
+        List<Customer> allCustomers = _context.Customers
+                                                        .Include(c => c.User)
+                                                        .OrderBy(c => c.CustomerId)
+                                                        .ToList();
 
-        string query = @"
-        SELECT
-            c.customer_id,
-            c.age,
-            u.user_id,
-            u.first_name,
-            u.last_name,
-            u.user_name,
-            u.user_email,
-            u.user_address
-        FROM
-            customer c
-        JOIN
-            users u
-        ON
-            c.user_id = u.user_id
-        ORDER BY
-            c.customer_id;
-        ";
-
-        using var command = new MySqlCommand(query, connection);
-        using var reader = command.ExecuteReader();
-
-        List<Customer> customers = new List<Customer>();
-
-        while (reader.Read())
-        {
-            int customerId = reader.GetInt32("customer_id");
-            int age = reader.GetInt32("age");
-
-            int userId = reader.GetInt32("user_id");
-            string firstName = reader.GetString("first_name");
-            string lastName = reader.GetString("last_name");
-            string userName = reader.GetString("user_name");
-            string userEmail = reader.GetString("user_email");
-            string userAddress = reader.GetString("user_address");
-
-            Customer customer = new Customer(customerId, userId, firstName, lastName, userName, userEmail, userAddress, age);
-
-            customers.Add(customer);
-        }
-
-        return customers;
+        return allCustomers;
     }
 }

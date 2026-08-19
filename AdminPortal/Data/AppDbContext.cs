@@ -1,4 +1,3 @@
-using System.Runtime.Serialization;
 using Microsoft.EntityFrameworkCore;
 namespace AdminPortal.Data;
 
@@ -32,6 +31,15 @@ public class AppDbContext : DbContext
                                        .HasOne(c => c.User)
                                        .WithMany()
                                        .HasForeignKey(c => c.UserId);
+
+        modelBuilder.Entity<Admin>().ToTable("admin");
+        modelBuilder.Entity<Admin>().Property(a => a.AdminId).HasColumnName("admin_id");
+        modelBuilder.Entity<Admin>().Property(a => a.UserId).HasColumnName("user_id");
+        modelBuilder.Entity<Admin>()
+                                    .HasOne(a => a.User)
+                                    .WithMany()
+                                    .HasForeignKey(a => a.UserId);
+
 
         modelBuilder.Entity<Product>().ToTable("product_catalogue");
         modelBuilder.Entity<Product>().Property(p => p.ProductId).HasColumnName("product_id");

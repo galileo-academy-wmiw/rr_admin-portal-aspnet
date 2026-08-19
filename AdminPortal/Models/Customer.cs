@@ -15,11 +15,6 @@ public class Customer
     public Customer(
         int customerId,
         int userId,
-        string firstName,
-        string lastName,
-        string userName,
-        string userEmail,
-        string userAddress,
         int age
         )
     {
