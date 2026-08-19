@@ -1,9 +1,15 @@
+using System.ComponentModel.DataAnnotations;
+
 namespace AdminPortal.Models;
 
-public class Customer : User
+public class Customer
 {
+    [Key]
     public int CustomerId { get; private set; }
+    public int UserId { get; set; }
     public int Age { get; private set; }
+    public User User { get; private set; } = null!; // Navigational property
+
 
 
     public Customer(
@@ -15,33 +21,16 @@ public class Customer : User
         string userEmail,
         string userAddress,
         int age
-        ) : base(userId, firstName, lastName, userName, userEmail, userAddress)
+        )
     {
         this.CustomerId = customerId;
-
+        this.UserId = userId;
         this.Age = age;
     }
 
     public Customer(int customerId)
     {
         CustomerId = customerId;
-    }
-    public override string ToString()
-    {
-        return
-    $@"----------------
-Customer Details
-----------------
-Customer ID: {CustomerId}
-
-User ID: {UserId}
-First Name: {FirstName}
-Last Name: {LastName}
-User Name: {UserName}
-User Email: {UserEmail}
-User Address: {UserAddress}
-Age: {Age}
-";
     }
 
 }

@@ -1,9 +1,14 @@
+using System.ComponentModel.DataAnnotations;
+using System.Security.AccessControl;
+
 namespace AdminPortal.Models;
 
 public class OrderDetails
-{
+{   [Key]
     public int DetailId { get; private set; }
     public int OrderId { get; private set; }
+    public Order Order { get; private set; } = null!; // Navigation property
+    public Product Product { get; private set; } = null!; // Navigation property
     public int ProductId { get; private set; }
     public int Amount { get; private set; }
     public double TotalPrice { get; private set; }
@@ -15,19 +20,5 @@ public class OrderDetails
         ProductId = productId;
         Amount = amount;
         TotalPrice = totalPrice;
-    }
-
-    public override string ToString()
-    {
-        return
-@"----------------
-Order Line
-----------------
-Detail ID: " + DetailId + @"
-Order ID: " + OrderId + @"
-Product ID: " + ProductId + @"
-Amount: " + Amount + @"
-Total Price: " + TotalPrice + @"
-";
     }
 }
