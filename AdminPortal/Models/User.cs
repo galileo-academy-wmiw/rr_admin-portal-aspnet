@@ -1,18 +1,29 @@
+using System.ComponentModel.DataAnnotations;
+
 namespace AdminPortal.Models;
 
-public class User 
+public class User
 {
+    [Key]
     public int UserId { get; protected set; }
-
     public string FirstName { get; protected set; }
     public string LastName { get; protected set; }
     public string UserName { get; protected set; }
     public string UserEmail { get; protected set; }
     public string UserAddress { get; protected set; }
-    
+
     public User(int userId, string firstName, string lastName, string userName, string userEmail, string userAdress)
     {
         UserId = userId;
+        FirstName = firstName;
+        LastName = lastName;
+        UserName = userName;
+        UserEmail = userEmail;
+        UserAddress = userAdress;
+    }
+
+    public User(string firstName, string lastName, string userName, string userEmail, string userAdress)
+    {
         FirstName = firstName;
         LastName = lastName;
         UserName = userName;
@@ -46,19 +57,4 @@ public class User
 
         Console.WriteLine($"-\nUser ID: {UserId}\nFirst Name: {FirstName}\nLast Name: {LastName}\nUser Name: {UserName}\nUser Email: {UserEmail}\nUser Adress: {UserAddress}");
     }
-
-    public override string ToString()
-    {
-        return
-    @"------------
-User Details
-------------
-User ID: " + UserId + @"
-First Name: " + FirstName + @"
-Last Name: " + LastName + @"
-User Name: " + UserName + @"
-User Email: " + UserEmail + @"
-User Address: " + UserAddress;
-    }
-
 }
