@@ -83,7 +83,7 @@ public class CustomerService : ICustomerService
 
         // Check if product exist already in cart. Else create new CART (order_detal row) in order_details table. 
         OrderDetails? existingDetail =
-            _orderRepository.GetOrderDetail(cart.OrderId, productId);
+            _orderRepository.GetOrderDetailByOrderIdAndProductId(cart.OrderId, productId);
 
         if (existingDetail != null)
         {
@@ -134,7 +134,7 @@ public class CustomerService : ICustomerService
         double unitPrice = product.ProductPrice;
 
         // Find existing cart line
-        OrderDetails? existingDetail = _orderRepository.GetOrderDetail(cart.OrderId, productId);
+        OrderDetails? existingDetail = _orderRepository.GetOrderDetailByOrderIdAndProductId(cart.OrderId, productId);
 
         if (existingDetail == null)
             return false;
@@ -151,7 +151,7 @@ public class CustomerService : ICustomerService
 
         if (newAmount == 0)
         {
-            result = _orderRepository.DeleteOrderDetail(existingDetail.DetailId);
+            result = _orderRepository.DeleteOrderDetailByDetailId(existingDetail.DetailId);
         }
         else
         {
@@ -189,7 +189,7 @@ public class CustomerService : ICustomerService
             return false;
 
         // 1) Convert current cart into a placed order
-        int updated = _orderRepository.UpdateOrderStatus(cart.OrderId, "PLACED");
+        int updated = _orderRepository.UpdateOrderStatusByOrderId(cart.OrderId, "PLACED");
         if (updated <= 0)
             return false;
 

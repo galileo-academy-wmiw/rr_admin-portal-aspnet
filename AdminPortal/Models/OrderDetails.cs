@@ -1,5 +1,4 @@
 using System.ComponentModel.DataAnnotations;
-using System.Security.AccessControl;
 
 namespace AdminPortal.Models;
 
@@ -21,4 +20,19 @@ public class OrderDetails
         Amount = amount;
         TotalPrice = totalPrice;
     }
+
+        public OrderDetails(int orderId, int productId, int amount, double totalPrice)
+    {
+        OrderId = orderId;
+        ProductId = productId;
+        Amount = amount;
+        TotalPrice = totalPrice;
+    }
+
+    public void UpdateAmountAndTotal(int amount, double totalPrice)
+    {
+        Amount = amount;
+        TotalPrice = totalPrice;
+    }
+
 }
