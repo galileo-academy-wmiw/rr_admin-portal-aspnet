@@ -1,14 +1,13 @@
-using MySqlConnector;
-
+using Microsoft.EntityFrameworkCore;
 namespace AdminPortal.Data.Repositories;
 
 public class OrderDetailsRepository: IOrderDetailsRepository
 {
-    private readonly Database _database;
+    private readonly AppDbContext _context;
 
-    public OrderDetailsRepository(Database database)
+    public OrderDetailsRepository(AppDbContext context)
     {
-        _database = database;
+        _context = context;
     }
 
     // ------------------------------------------------------------
@@ -16,75 +15,14 @@ public class OrderDetailsRepository: IOrderDetailsRepository
     // ------------------------------------------------------------
     public List<OrderDetails> GetAllOrderDetails()
     {
-        using var connection = _database.GetConnection();
-        connection.Open();
 
-        string query = @"
-SELECT 
-    od.detail_id,
-    od.order_id,
-    od.product_id,
-    od.amount,
-    od.total_price,
-
-    o.order_date,
-    o.order_status,
-
-    p.product_name,
-    p.description,
-    p.product_price,
-    p.quantity_in_stock,
-
-    c.customer_id,
-    c.username
-
-FROM order_details od
-JOIN orders o 
-    ON od.order_id = o.order_id
-JOIN product_catalogue p
-    ON od.product_id = p.product_id
-JOIN customer c
-    ON o.customer_id = c.customer_id
-ORDER BY od.detail_id;
-";
-
-        using var command = new MySqlCommand(query, connection);
-        using var reader = command.ExecuteReader();
-
-        List<OrderDetails> details = new List<OrderDetails>();
-
-        while (reader.Read())
-        {
-            int detailId = reader.GetInt32("detail_id");
-
-            int orderId = reader.GetInt32("order_id");
-            DateTime orderDate = reader.GetDateTime("order_date");
-            string orderStatus = reader.GetString("order_status");
-
-            int productId = reader.GetInt32("product_id");
-            string productName = reader.GetString("product_name");
-            string description = reader.GetString("description");
-            double productPrice = reader.GetDouble("product_price");
-            int quantityInStock = reader.GetInt32("quantity_in_stock");
-
-            int amount = reader.GetInt32("amount");
-            double totalPrice = reader.GetDouble("total_price");
-
-            int customerId = reader.GetInt32("customer_id");
-            // string username = reader.GetString("username");
-
-            Customer customer = new Customer(customerId);
-
-            Order order = new Order(orderId, customer, orderDate, orderStatus);
-
-            Product product = new Product(productId, productName, description, productPrice, quantityInStock);
-
-            OrderDetails orderDetail = new OrderDetails(detailId, order.OrderId, product.ProductId, amount, totalPrice);
-
-            details.Add(orderDetail);
-        }
-
-        return details;
+        List<OrderDetails> orderDetails = _context.OrderDetails
+                                                               .Include(od => od.Order)
+                                                               .ThenInclude(o => o.Customer)
+                                                               .Include(od => od.Product)
+                                                               .OrderBy(od => od.DetailId)
+                                                               .ToList();
+        return orderDetails;
     }
 
 }
