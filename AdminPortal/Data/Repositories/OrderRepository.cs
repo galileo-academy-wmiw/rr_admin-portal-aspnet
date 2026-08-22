@@ -1,19 +1,16 @@
 // TODO: Move OrderDetails methods to OrderDetailsRepository after EF Core migration.
 
 using Microsoft.EntityFrameworkCore;
-using MySqlConnector;
 
 namespace AdminPortal.Data.Repositories;
 
 public class OrderRepository : IOrderRepository
 {
-    public readonly Database _database;
     public readonly AppDbContext _context;
     
 
-    public OrderRepository(Database database_parameter, AppDbContext context)
+    public OrderRepository(AppDbContext context)
     {
-        _database = database_parameter;
         _context = context;
     }
 

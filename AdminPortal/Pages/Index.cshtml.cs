@@ -1,23 +1,54 @@
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using Microsoft.EntityFrameworkCore;
 
 namespace AdminPortal.Pages;
 
 public class IndexModel : PageModel
 {
-    private readonly ILogger<IndexModel> _logger;
-    private readonly IProductService _productService;
+    private readonly AppDbContext _context;
 
+    public List<User> Users { get; set; } = [];
+    public List<Customer> Customers { get; set; } = [];
+    public List<Admin> Admins { get; set; } = [];
     public List<Product> Products { get; set; } = [];
+    public List<Order> Orders { get; set; } = [];
+    public List<OrderDetails> OrderDetails { get; set; } = [];
 
-    public IndexModel(ILogger<IndexModel> logger, IProductService productService)
+    public IndexModel(AppDbContext context)
     {
-        _logger = logger;
-        _productService = productService;
+        _context = context;
     }
 
     public void OnGet()
     {
-        Products = _productService.GetAllProducts();
+        Users = _context.Users
+            .OrderBy(u => u.UserId)
+            .ToList();
+
+        Customers = _context.Customers
+            .Include(c => c.User)
+            .OrderBy(c => c.CustomerId)
+            .ToList();
+
+        Admins = _context.Admins
+            .Include(a => a.User)
+            .OrderBy(a => a.AdminId)
+            .ToList();
+
+        Products = _context.Products
+            .OrderBy(p => p.ProductId)
+            .ToList();
+
+        Orders = _context.Orders
+            .Include(o => o.Customer)
+            .ThenInclude(c => c.User)
+            .OrderBy(o => o.OrderId)
+            .ToList();
+
+        OrderDetails = _context.OrderDetails
+            .Include(od => od.Order)
+            .Include(od => od.Product)
+            .OrderBy(od => od.DetailId)
+            .ToList();
     }
 }
