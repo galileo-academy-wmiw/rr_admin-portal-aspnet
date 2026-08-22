@@ -9,7 +9,6 @@ builder.Services.AddRazorPages();
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection")
                         ?? throw new InvalidOperationException("Connection string 'DefaultConnection' not found.");
 
-builder.Services.AddSingleton(new Database(connectionString));
 builder.Services.AddDbContext<AppDbContext>(Options => Options.UseMySql(connectionString,ServerVersion.AutoDetect(connectionString)));
 builder.Services.AddScoped<IProductRepository, ProductRepository>();
 builder.Services.AddScoped<ICustomerRepository, CustomerRepository>();
