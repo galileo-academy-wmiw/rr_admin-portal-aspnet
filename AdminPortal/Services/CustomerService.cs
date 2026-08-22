@@ -6,12 +6,14 @@ public class CustomerService : ICustomerService
     private readonly IProductRepository _productRepository;
     private readonly ICustomerRepository _customerRepository;
     private readonly IOrderRepository _orderRepository;
+    private readonly IOrderDetailsRepository _orderdetailsRepository;
 
-    public CustomerService(IProductRepository productRepository, ICustomerRepository customerRepository, IOrderRepository orderRepository)
+    public CustomerService(IProductRepository productRepository, ICustomerRepository customerRepository, IOrderRepository orderRepository, IOrderDetailsRepository orderDetailsRepository)
     {
         _productRepository = productRepository;
         _customerRepository = customerRepository;
         _orderRepository = orderRepository;
+        _orderdetailsRepository = orderDetailsRepository;
     }
 
     /*
@@ -83,14 +85,14 @@ public class CustomerService : ICustomerService
 
         // Check if product exist already in cart. Else create new CART (order_detal row) in order_details table. 
         OrderDetails? existingDetail =
-            _orderRepository.GetOrderDetailByOrderIdAndProductId(cart.OrderId, productId);
+            _orderdetailsRepository.GetOrderDetailByOrderIdAndProductId(cart.OrderId, productId);
 
         if (existingDetail != null)
         {
             int newAmount = existingDetail.Amount + quantity;
             double newTotal = newAmount * unitPrice;
 
-            return _orderRepository.UpdateOrderDetail(
+            return _orderdetailsRepository.UpdateOrderDetail(
                 existingDetail.DetailId,
                 newAmount,
                 newTotal);
@@ -99,7 +101,7 @@ public class CustomerService : ICustomerService
         {
             double totalPrice = quantity * unitPrice;
 
-            return _orderRepository.InsertOrderDetail(
+            return _orderdetailsRepository.InsertOrderDetail(
                 cart.OrderId,
                 productId,
                 quantity,
@@ -134,7 +136,7 @@ public class CustomerService : ICustomerService
         double unitPrice = product.ProductPrice;
 
         // Find existing cart line
-        OrderDetails? existingDetail = _orderRepository.GetOrderDetailByOrderIdAndProductId(cart.OrderId, productId);
+        OrderDetails? existingDetail = _orderdetailsRepository.GetOrderDetailByOrderIdAndProductId(cart.OrderId, productId);
 
         if (existingDetail == null)
             return false;
@@ -151,11 +153,11 @@ public class CustomerService : ICustomerService
 
         if (newAmount == 0)
         {
-            result = _orderRepository.DeleteOrderDetailByDetailId(existingDetail.DetailId);
+            result = _orderdetailsRepository.DeleteOrderDetailByDetailId(existingDetail.DetailId);
         }
         else
         {
-            result = _orderRepository.UpdateOrderDetail(existingDetail.DetailId, newAmount, newTotal);
+            result = _orderdetailsRepository.UpdateOrderDetail(existingDetail.DetailId, newAmount, newTotal);
         }
 
         return result;
@@ -167,7 +169,7 @@ public class CustomerService : ICustomerService
         Order cart = GetOrCreateCart(customerId);
 
         // Fetch all lines for this cart
-        return _orderRepository.GetOrderDetailsByOrderId(cart.OrderId);
+        return _orderdetailsRepository.GetOrderDetailsByOrderId(cart.OrderId);
     }
 
     /*
@@ -184,7 +186,7 @@ public class CustomerService : ICustomerService
         Order cart = GetOrCreateCart(customerId);
 
         // Cart must have items before we can place an order
-        List<OrderDetails> cartItems = _orderRepository.GetOrderDetailsByOrderId(cart.OrderId);
+        List<OrderDetails> cartItems = _orderdetailsRepository.GetOrderDetailsByOrderId(cart.OrderId);
         if (cartItems.Count == 0)
             return false;
 
