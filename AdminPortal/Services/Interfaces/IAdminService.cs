@@ -2,5 +2,5 @@ namespace AdminPortal.Services.Interfaces;
 
 public interface IAdminService
 {
-    List<Order> GetAllSubmittedOrders();
+    List<Order> GetAllPlacedOrders();
 }

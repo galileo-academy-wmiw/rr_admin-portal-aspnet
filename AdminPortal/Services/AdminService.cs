@@ -9,8 +9,8 @@ public class AdminService : IAdminService
         _orderRepository = orderRepository;
     }
 
-    public List<Order> GetAllSubmittedOrders()
+    public List<Order> GetAllPlacedOrders()
     {
-        return _orderRepository.GetAllSubmittedOrders();
+        return _orderRepository.GetAllPlacedOrders();
     }
 }

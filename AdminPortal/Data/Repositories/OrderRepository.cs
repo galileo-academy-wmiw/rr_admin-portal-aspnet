@@ -17,14 +17,14 @@ public class OrderRepository : IOrderRepository
     METHOD: Retrieves full Order objects.
     ==================================================================================================
     */
-    public List<Order> GetAllSubmittedOrders()
+    public List<Order> GetAllPlacedOrders()
     {
-        List<Order> allSubmittedOrders =  _context.Orders.Include(o => o.Customer)
-                                                         .ThenInclude(c => c.User)
-                                                         .Where(o => o.OrderStatus == "SUBMITTED")
-                                                         .OrderBy(o => o.OrderId)
-                                                         .ToList();
-        return allSubmittedOrders;
+        List<Order> allPlacedOrders =  _context.Orders.Include(o => o.Customer)
+                                                      .ThenInclude(c => c.User)
+                                                      .Where(o => o.OrderStatus == "PLACED")
+                                                      .OrderBy(o => o.OrderId)
+                                                      .ToList();
+        return allPlacedOrders;
     }
 
     /*
