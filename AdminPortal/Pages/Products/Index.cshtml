@@ -1,0 +1,62 @@
+@page
+@model AdminPortal.Pages.Products.IndexModel
+
+@{
+    ViewData["Title"] = "Products";
+}
+
+<h1>Products</h1>
+
+<p>
+    <a asp-page="./Create" class="btn btn-primary">
+        Add product
+    </a>
+</p>
+
+@if (Model.Products.Count == 0)
+{
+    <div class="alert alert-info">
+        No products were found.
+    </div>
+}
+else
+{
+    <table class="table table-bordered">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Name</th>
+                <th>Description</th>
+                <th>Price</th>
+                <th>Stock</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+
+        <tbody>
+            @foreach (var product in Model.Products)
+            {
+                <tr>
+                    <td>@product.ProductId</td>
+                    <td>@product.ProductName</td>
+                    <td>@product.Description</td>
+                    <td>@product.ProductPrice.ToString("0.00")</td>
+                    <td>@product.QuantityInStock</td>
+                    <td>
+                        <a asp-page="./Edit"
+                           asp-route-id="@product.ProductId"
+                           class="btn btn-primary">
+                            Edit
+                        </a>
+
+                        <a asp-page="./Delete"
+                           asp-route-id="@product.ProductId"
+                           class="btn btn-danger">
+                            Delete
+                        </a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
