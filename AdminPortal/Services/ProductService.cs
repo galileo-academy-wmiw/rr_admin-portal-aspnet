@@ -34,4 +34,9 @@ public class ProductService: IProductService
     {
         return _productRepository.GetAllProducts();
     }
+
+    public Product? GetProductById(int productId)
+    {
+        return _productRepository.GetProductById(productId);
+    }
 }

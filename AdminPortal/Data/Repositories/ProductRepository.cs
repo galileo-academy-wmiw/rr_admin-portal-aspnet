@@ -21,10 +21,19 @@ METHOD: Retrieves full Product objects.
 
 /*
 ------------------------------------------------------------------
-Method: INSERT a new product in product catalogue. 
+METHOD: Retrieves a Product object by Product id.
 ------------------------------------------------------------------
 */
+    public Product? GetProductById(int productId)
+    {
+        return _context.Products.FirstOrDefault(p => p.ProductId == productId);
+    }
 
+/*
+------------------------------------------------------------------
+Method: INSERT a new product in product catalogue.
+------------------------------------------------------------------
+*/
     public int InsertProduct(string productName, string description, double productPrice, int quantityInStock)
     {
         var product = new Product (productName, description, productPrice, quantityInStock);
@@ -39,7 +48,6 @@ Method: INSERT a new product in product catalogue.
 Method: Edit/ Update a product product in product catalogue. 
 ------------------------------------------------------------------
 */
-
     public int UpdateProduct(int id, string productName, string description, double productPrice, int quantityInStock)
     {
         var product = _context.Products.FirstOrDefault(p => p.ProductId == id);
