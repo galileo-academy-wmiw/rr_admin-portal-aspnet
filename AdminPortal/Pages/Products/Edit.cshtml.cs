@@ -21,7 +21,7 @@ public class EditModel : PageModel
     public string Description { get; set; } = "";
 
     [BindProperty]
-    [Range(0.1, double.MaxValue, ErrorMessage = "Price must be at least 0.10.")]
+    [Range(0.1, 1000, ErrorMessage = "Price must be at least 0.10.")]
     [Display(Name = "Price")]
     public double ProductPrice { get; set; }
 
