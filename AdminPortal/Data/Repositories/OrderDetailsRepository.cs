@@ -102,6 +102,7 @@ public class OrderDetailsRepository : IOrderDetailsRepository
     public List<OrderDetails> GetOrderDetailsByOrderId(int orderId)
     {
         List<OrderDetails> orderDetails = _context.OrderDetails
+                                                               .Include(od => od.Product)
                                                                .Where(od => od.OrderId == orderId)
                                                                .OrderBy(od => od.DetailId)
                                                                .ToList();

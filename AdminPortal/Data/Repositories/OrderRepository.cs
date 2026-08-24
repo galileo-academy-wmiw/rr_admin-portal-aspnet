@@ -27,6 +27,14 @@ public class OrderRepository : IOrderRepository
         return allPlacedOrders;
     }
 
+    public Order? GetPlacedOrderById(int orderId)
+    {
+        return _context.Orders
+            .Include(o => o.Customer)
+            .ThenInclude(c => c.User)
+            .FirstOrDefault(o => o.OrderId == orderId && o.OrderStatus == "PLACED");
+    }
+
     /*
     ==================================================================================================
     METHOD: Retrieve CART order for a specific customer.
