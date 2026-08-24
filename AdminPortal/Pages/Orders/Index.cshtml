@@ -1,0 +1,46 @@
+@page "/Orders-overview"
+@model AdminPortal.Pages.Orders.IndexModel
+
+@{
+    ViewData["Title"] = "Orders";
+}
+
+<h1>Orders</h1>
+
+@if (Model.Orders.Count == 0)
+{
+    <div class="alert alert-info">
+        No Orders were found.
+    </div>
+}
+else
+{
+<table class="table table-bordered">
+    <thead>
+        <tr>
+            <th>Order ID</th>
+            <th>Customer ID</th>
+            <th>Customer First Name</th>
+            <th>Customer Last Name</th>
+            <th>Order Date</th>
+            <th>Order Status</th>
+            <th>Details</th>
+        </tr>
+    </thead>
+    <tbody> @foreach (var order in Model.Orders)
+        {
+        <tr>
+            <td>@order.OrderId</td>
+            <td>@order.CustomerId</td>
+            <td>@order.Customer.User.FirstName</td>
+            <td>@order.Customer.User.LastName</td>
+            <td>@order.OrderDate.ToString("dd-MM-yyyy")</td>
+            <td>@order.OrderStatus</td>
+            <td><a asp-page="./Details" asp-route-id="@order.OrderId" class="btn btn-primary">Details</a>
+            </td>
+        </tr>
+        }
+    </tbody>
+</table>
+
+}
