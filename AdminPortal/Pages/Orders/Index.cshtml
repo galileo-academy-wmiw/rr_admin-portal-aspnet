@@ -24,7 +24,7 @@ else
             <th>Customer Last Name</th>
             <th>Order Date</th>
             <th>Order Status</th>
-            <th>Details</th>
+            <th>Actions</th>
         </tr>
     </thead>
     <tbody> @foreach (var order in Model.Orders)
@@ -36,7 +36,18 @@ else
             <td>@order.Customer.User.LastName</td>
             <td>@order.OrderDate.ToString("dd-MM-yyyy")</td>
             <td>@order.OrderStatus</td>
-            <td><a asp-page="./Details" asp-route-id="@order.OrderId" class="btn btn-primary">Details</a>
+            <td>
+                <form method="post"
+                      asp-page-handler="Complete"
+                      asp-route-id="@order.OrderId">
+                    <button type="submit" class="btn btn-primary">Complete</button>
+                </form>
+
+                <form method="post"
+                      asp-page-handler="Reject"
+                      asp-route-id="@order.OrderId">
+                    <button type="submit" class="btn btn-danger">Reject</button>
+                </form>
             </td>
         </tr>
         }
