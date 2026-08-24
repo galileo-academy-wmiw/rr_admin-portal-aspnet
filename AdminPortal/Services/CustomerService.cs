@@ -16,6 +16,16 @@ public class CustomerService : ICustomerService
         _orderdetailsRepository = orderDetailsRepository;
     }
 
+    public List<Customer> GetAllCustomers()
+    {
+        return _customerRepository.GetAllCustomers();
+    }
+
+    public Customer? GetCustomerById(int customerId)
+    {
+        return _customerRepository.GetCustomerById(customerId);
+    }
+
     /*
     ==================================================================================================
     Method: Retrieve customer ID based on username.

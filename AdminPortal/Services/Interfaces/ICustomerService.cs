@@ -1,6 +1,8 @@
 namespace AdminPortal.Services.Interfaces;
 public interface ICustomerService
 {
+    List<Customer> GetAllCustomers();
+    Customer? GetCustomerById(int customerId);
     int? GetCustomerIdByUserName(string username);
     Order GetOrCreateCart(int customerId);
     bool AddProductToCart(int customerId, int productId, int quantity);

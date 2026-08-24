@@ -1,0 +1,37 @@
+@page "/customers/{id:int}"
+@model AdminPortal.Pages.Customers.DetailsModel
+
+@{
+    ViewData["Title"] = "Customer details";
+}
+
+<h1>Customer details</h1>
+
+<table class="table table-bordered">
+    <tr>
+        <th>Customer ID</th>
+        <td>@Model.Customer.CustomerId</td>
+    </tr>
+    <tr>
+        <th>First name</th>
+        <td>@Model.Customer.User.FirstName</td>
+    </tr>
+    <tr>
+        <th>Last name</th>
+        <td>@Model.Customer.User.LastName</td>
+    </tr>
+    <tr>
+        <th>Age</th>
+        <td>@Model.Customer.Age</td>
+    </tr>
+    <tr>
+        <th>Email</th>
+        <td>@Model.Customer.User.UserEmail</td>
+    </tr>
+    <tr>
+        <th>Address</th>
+        <td>@Model.Customer.User.UserAddress</td>
+    </tr>
+</table>
+
+<a asp-page="/Customers/Index" class="btn btn-secondary">Back</a>

@@ -21,4 +21,11 @@ public class CustomerRepository: ICustomerRepository
 
         return allCustomers;
     }
+
+    public Customer? GetCustomerById(int customerId)
+    {
+        return _context.Customers
+            .Include(c => c.User)
+            .FirstOrDefault(c => c.CustomerId == customerId);
+    }
 }

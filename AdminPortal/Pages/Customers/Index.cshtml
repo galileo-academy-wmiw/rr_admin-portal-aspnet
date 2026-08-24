@@ -1,0 +1,49 @@
+@page "/customers-overview"
+@model AdminPortal.Pages.Customers.IndexModel
+
+@{
+    ViewData["Title"] = "Customers";
+}
+
+<h1>Customers</h1>
+
+@if (Model.Customers.Count == 0)
+{
+    <div class="alert alert-info">
+        No customers were found.
+    </div>
+}
+else
+{
+    <table class="table table-bordered">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>First name</th>
+                <th>Last name</th>
+                <th>Age</th>
+                <th>Email</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var customer in Model.Customers)
+            {
+                <tr>
+                    <td>@customer.CustomerId</td>
+                    <td>@customer.User.FirstName</td>
+                    <td>@customer.User.LastName</td>
+                    <td>@customer.Age</td>
+                    <td>@customer.User.UserEmail</td>
+                    <td>
+                        <a asp-page="./Details"
+                           asp-route-id="@customer.CustomerId"
+                           class="btn btn-primary">
+                            Details
+                        </a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
