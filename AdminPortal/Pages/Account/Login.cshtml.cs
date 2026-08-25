@@ -10,4 +10,8 @@ public class LogInModel : PageModel
     public string Username { get; set; } = string.Empty;
     [BindProperty]
     public string Password { get; set; } = string.Empty;
+    public void OnPost()
+    {
+
+    }
 }
