@@ -1,11 +1,14 @@
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 
 namespace AdminPortal.Pages.Orders;
+
+[Authorize(Roles = "Admin")]
 public class IndexModel : PageModel
 {
     private readonly IOrderService _orderService;
-    public List<Order> Orders {get; private set;} = [];
+    public List<Order> Orders { get; private set; } = [];
     public IndexModel(IOrderService orderService)
     {
         _orderService = orderService;

@@ -1,9 +1,11 @@
+using Microsoft.AspNetCore.Authorization;
 using System.ComponentModel.DataAnnotations;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 
 namespace AdminPortal.Pages.Products;
 
+[Authorize(Roles = "Admin")]
 public class EditModel : PageModel
 {
     private readonly IProductService _productService;

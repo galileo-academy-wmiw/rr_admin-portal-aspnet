@@ -1,7 +1,9 @@
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 
 namespace AdminPortal.Pages.Customers;
 
+[Authorize(Roles = "Admin")]
 public class IndexModel : PageModel
 {
     private readonly ICustomerService _customerService;
